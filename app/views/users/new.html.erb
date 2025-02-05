@@ -1,0 +1,17 @@
+<h1>Register</h1>
+
+<% if flash[:notice] %>
+  <p><strong><%= flash[:notice] %></strong></p>
+<% end %>
+
+<%= turbo_frame_tag "auth_form" do %>
+  <%= form_with url: users_path, local: false do |form| %>
+    <div>
+      <%= form.label :phone_number, "Phone Number" %>
+      <%= form.text_field :phone_number, required: true %>
+    </div>
+    <div>
+      <%= form.submit "Send Code" %>
+    </div>
+  <% end %>
+<% end %>
