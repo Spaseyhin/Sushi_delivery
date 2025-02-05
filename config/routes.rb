@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  root 'home#index'
+  resources :users, only: %i[new create]
+  post '/verify', to: 'users#verify', as: 'verify_user'
+  delete '/logout', to: 'users#logout', as: 'logout' # Добавили выход
 end
