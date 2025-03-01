@@ -1,103 +1,65 @@
 # frozen_string_literal: true
 
-# UsersController управляет процессом аутентификации пользователей через OTP (одноразовый пароль).
+# Контроллер `UsersController` управляет процессом аутентификации пользователей через OTP-коды.
 # - `create` → Генерирует и отправляет OTP пользователю.
 # - `verify` → Проверяет введённый OTP и авторизует пользователя.
 # - `logout` → Завершает сеанс пользователя.
 #
-# OTP хранится в `session` и удаляется после успешной проверки или истечения срока.
+# OTP хранится в базе данных и удаляется после успешной проверки или истечения срока.
 class UsersController < ApplicationController
-  before_action :find_or_create_user, only: %i[create verify]
+  before_action :set_user, only: %i[create verify]
+
   def new
     @user = User.new
   end
 
+  # Создаёт и отправляет OTP пользователю
   def create
-    phone_number = params[:phone_number]
-    generate_otp(phone_number)
+    @user.generate_confirmation_code!
+    Rails.logger.info "✅ Сгенерирован OTP для #{@user.phone_number}: #{@user.confirmation_code}"
 
     respond_to do |format|
-      format.turbo_stream { render partial: 'users/create' }
+      format.turbo_stream { render partial: 'users/create', locals: { user: @user } }
     end
   end
 
+  # Проверяет введённый OTP и авторизует пользователя
   def verify
-    phone_number = params[:phone_number]
-
-    return handle_expired_otp(phone_number) if otp_expired?(phone_number)
-
-    return log_in_user(phone_number) if valid_otp?(phone_number, params[:confirmation_code]) # Блок 2
-
-    handle_invalid_otp # Блок 3 (вызывается, если предыдущие не сработали)
+    if @user.verify(params[:confirmation_code]) # Проверяем код через модель
+      log_in_user
+    else
+      handle_invalid_otp
+    end
   end
 
+  # Выход пользователя
   def logout
-    session.delete(:user_id) # Удаляем сессию пользователя
+    session.delete(:user_id)
     flash[:notice] = I18n.t('users.logout_success')
     redirect_to root_path
   end
 
-  def find_or_create_user
+  private
+
+  # Ищем пользователя по номеру телефона
+  def set_user
     @user = User.find_or_create_by(phone_number: params[:phone_number])
   end
 
-  private
-
-  # Генерирует OTP и сохраняет его в сессии
-  def generate_otp(phone_number)
-    session[:otp_codes] ||= {}
-    session[:otp_expires] ||= {}
-
-    otp_code = rand(1000..9999).to_s
-    session[:otp_codes][phone_number] = otp_code
-    session[:otp_expires][phone_number] = 5.minutes.from_now
-
-    Rails.logger.info "Generated OTP for #{phone_number}: #{otp_code}" # Логируем код
-  end
-
-  # Обрабатывает случай, если OTP-код истёк
-  def handle_expired_otp(phone_number)
-    flash[:alert] = I18n.t('users.otp_expired') # "OTP code has expired!"
-    clear_otp(phone_number) # Удаляем старый OTP перед редиректом
-    redirect_to root_path
-  end
-
-  # Проверяет, истёк ли OTP-код
-  def otp_expired?(phone_number)
-    expires_at = session.dig(:otp_expires, phone_number)
-    expires_at && expires_at < Time.current
-  end
-
   # Авторизует пользователя
-  def log_in_user(phone_number)
+  def log_in_user
     session[:user_id] = @user.id
-    clear_otp(phone_number) # Используем новый метод для удаления OTP
-
-    flash[:notice] = I18n.t('users.otp_verified') # "Successfully verified!"
+    flash[:notice] = I18n.t('users.otp_verified')
     redirect_to root_path
   end
 
-  # Удаляет OTP-код и его срок действия из сессии
-  def clear_otp(phone_number)
-    session[:otp_codes]&.delete(phone_number)
-    session[:otp_expires]&.delete(phone_number)
-  end
-
-  # Проверяет, совпадает ли введённый пользователем OTP с сохранённым
-  def valid_otp?(phone_number, entered_code)
-    stored_code = session.dig(:otp_codes, phone_number)
-    stored_code.present? && ActiveSupport::SecurityUtils.secure_compare(stored_code, entered_code)
-  end
-
-  # Обрабатывает случай, если OTP неверный
+  # Обрабатывает неверный код
   def handle_invalid_otp
-    respond_to do |format|
-      @error_message = I18n.t('users.otp_invalid') # "Invalid code! Try again."
-      format.turbo_stream { render partial: 'users/create' }
-    end
-  end
+    flash.now[:alert] = I18n.t('users.otp_invalid')
+    Rails.logger.info '❌ Ошибка: неверный код! Отправляем Turbo Stream.'
 
-  def user_params
-    params.require(:user).permit(:phone_number)
+    respond_to do |format|
+      format.turbo_stream { render partial: 'users/create', locals: { user: @user } }
+    end
   end
 end
