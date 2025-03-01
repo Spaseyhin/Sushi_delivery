@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_16_224130) do
     t.datetime "confirmation_code_sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
   end
 
 end
