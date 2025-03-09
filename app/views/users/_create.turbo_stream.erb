@@ -1,0 +1,32 @@
+<turbo-stream action="replace" target="auth_form">
+  <template>
+    <div id="auth_form">
+      <% Rails.logger.info "📌 Flash alert: #{flash[:alert]}" %>
+
+      <% if flash[:alert] %>
+        <div class="alert alert-danger">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
+
+      <p class="alert alert-info"><strong>Your Code: <%= user&.confirmation_code || "N/A" %></strong></p>
+
+      <%= form_with url: verify_user_path, local: false, class: "needs-validation", data: { controller: "form-validation" } do |form| %>
+        <%= form.hidden_field :phone_number, value: user.phone_number %>
+
+        <div class="mb-3 text-start">
+          <%= form.label :confirmation_code, "Enter Confirmation Code", class: "form-label" %>
+          <%= form.text_field :confirmation_code, required: true, class: "form-control text-center", data: { form_validation_target: "code" }, placeholder: "1234" %>
+        </div>
+
+        <div class="d-grid">
+          <%= form.submit "Verify", class: "btn btn-success btn-lg" %>
+        </div>
+      <% end %>
+    </div>
+
+    <script>
+      document.dispatchEvent(new Event("turbo:load"));
+    </script>
+  </template>
+</turbo-stream>

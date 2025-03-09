@@ -9,8 +9,23 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body>
+    <%= turbo_frame_tag "flash" do %>
+      <% if flash[:notice] %>
+        <p style="color: green;"><%= flash[:notice] %></p>
+      <% end %>
+
+      <% if flash[:alert] %>
+        <p style="color: red;"><%= flash[:alert] %></p>
+      <% end %>
+    <% end %> 
+    <% if logged_in? %>
+  <p>Welcome, <%= current_user.phone_number %>!</p>
+  <%= button_to "Logout", logout_path, method: :delete, class: "button" %>
+<% else %>
+  <%= link_to "Login", new_user_path, class: "button" %>
+<% end %>
+
     <%= yield %>
   </body>
 </html>

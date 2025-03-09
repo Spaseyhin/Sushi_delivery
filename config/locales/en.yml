@@ -31,3 +31,8 @@
 
 en:
   hello: "Hello world"
+  users:
+    logout_success: "Logged out successfully."
+    otp_expired: "OTP code has expired!"
+    otp_verified: "Successfully verified!"
+    otp_invalid: "Invalid code! Try again."
