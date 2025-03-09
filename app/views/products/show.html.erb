@@ -1,0 +1,4 @@
+<%= form_with url: cart_items_path, method: :post do %>
+  <%= hidden_field_tag :product_id, @product.id %>
+  <%= submit_tag "Добавить в корзину", class: "btn btn-primary" %>
+<% end %>

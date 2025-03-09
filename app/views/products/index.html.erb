@@ -1,0 +1,18 @@
+<h1>Меню суши</h1>
+
+<div class="product-list">
+  <% @products.each do |product| %>
+    <div class="product-card">
+      <h3><%= product.name %></h3>
+      <p><%= product.description %></p>
+      <p><strong><%= product.price %> ₽</strong></p>
+
+      <%= form_with url: cart_items_path, method: :post do %>
+        <%= hidden_field_tag :product_id, product.id %>
+        <%= submit_tag "Добавить в корзину", class: "btn btn-primary" %>
+      <% end %>
+
+      <%= link_to "Подробнее", product_path(product), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
