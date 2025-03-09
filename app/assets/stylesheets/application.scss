@@ -13,5 +13,25 @@
  *= require_tree .
  *= require_self
  */
+
  @import "bootstrap";
 
+ .product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .product-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    width: 200px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn {
+    display: block;
+    margin: 5px auto;
+  }
