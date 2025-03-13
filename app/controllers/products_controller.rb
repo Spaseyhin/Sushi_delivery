@@ -6,4 +6,8 @@ class ProductsController < ApplicationController
   def show
     @product = Product.find(params[:id])
   end
+
+  def product_params
+    params.require(:product).permit(:name, :price, :description, :weight, :image)
+  end
 end

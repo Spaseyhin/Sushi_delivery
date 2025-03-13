@@ -34,9 +34,10 @@ class UsersController < ApplicationController
 
   # Выход пользователя
   def logout
-    session.delete(:user_id)
-    flash[:notice] = I18n.t('users.logout_success')
-    redirect_to root_path
+    session.delete(:user_id)    # Удаляем ID пользователя из сессии
+    session.delete(:cart_id)    # Удаляем корзину пользователя (очищаем текущую корзину)
+
+    redirect_to root_path # Возвращаем на главную (и там создается новая корзина)
   end
 
   private
@@ -47,9 +48,38 @@ class UsersController < ApplicationController
   end
 
   # Авторизует пользователя
+  # Авторизует пользователя
   def log_in_user
     session[:user_id] = @user.id
-    flash[:notice] = I18n.t('users.otp_verified')
+
+    guest_cart = Cart.find_by(id: session[:cart_id]) # Гостевая корзина
+
+    # Создаем корзину для пользователя, если нет
+    user_cart = @user.cart || @user.create_cart
+
+    if guest_cart && guest_cart.cart_items.any?
+      # Переносим товары из гостевой корзины в корзину пользователя
+      guest_cart.cart_items.each do |item|
+        existing_item = user_cart.cart_items.find_by(product_id: item.product_id)
+
+        if existing_item
+          # Если товар уже есть в корзине пользователя — увеличиваем количество
+          existing_item.update(quantity: existing_item.quantity + item.quantity)
+        else
+          # Если товара нет — добавляем
+          user_cart.cart_items.create(product_id: item.product_id, quantity: item.quantity)
+        end
+      end
+
+      # Удаляем гостевую корзину
+      guest_cart.destroy
+
+      Rails.logger.info '✅ Товары из гостевой корзины перенесены и корзина удалена'
+    end
+
+    # Привязываем корзину пользователя к сессии
+    session[:cart_id] = user_cart.id
+
     redirect_to root_path
   end
 

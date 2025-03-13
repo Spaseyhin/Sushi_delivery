@@ -1,13 +1,13 @@
 class CartsController < ApplicationController
   def show
-    @cart = current_cart
-    @cart_items = @cart.cart_items.includes(:product) # Загружаем товары
-    @total_price = @cart_items.sum { |item| item.product.price * item.quantity }
-  end
+    load_cart_items
 
-  private
-
-  def current_cart
-    @current_cart ||= Cart.find_or_create_by(user: current_user)
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        render partial: 'carts/cart_frame', formats: [:html],
+               locals: { cart_items: @cart_items, cart_total_price: @cart_total_price }
+      end
+    end
   end
 end
