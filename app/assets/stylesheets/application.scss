@@ -35,3 +35,35 @@
     display: block;
     margin: 5px auto;
   }
+
+  .custom-red-btn {
+    background-color: #e53935; /* Красный цвет */
+    color: white; /* Белый текст */
+    font-weight: bold; /* Жирный текст */
+    border-radius: 12px; /* Закругленные углы */
+    padding: 10px 0; /* Вертикальные отступы */
+    border: none; /* Без рамки */
+    font-size: 16px; /* Чуть побольше шрифт */
+  }
+  
+  .custom-red-btn:hover {
+    background-color: #d32f2f; /* Цвет при наведении */
+    color: white;
+  }
+  .logo-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700; /* Жирный */
+    font-size: 2rem; /* Размер */
+    color: #DB3D3D; /* Красный как на лого */
+    text-transform: lowercase; /* Если хочется все буквы маленькими */
+    letter-spacing: 1px; /* Мягкие пробелы */
+  }
+  .card-hover {
+    transition: transform 0.2s ease-in-out; /* Плавность */
+  }
+  
+  .card-hover:hover {
+    transform: scale(1.05); /* Увеличение на 5% */
+    z-index: 10; /* Чтобы не перекрывались */
+  }
+  
