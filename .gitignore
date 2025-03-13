@@ -31,5 +31,4 @@
 /config/master.key
 .env
 .vscode/settings.json
-spec/views/.DS_Store
-spec/views/home/.DS_Store
+
