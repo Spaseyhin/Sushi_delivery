@@ -16,11 +16,17 @@
 
         <div class="mb-3 text-start">
           <%= form.label :confirmation_code, "Enter Confirmation Code", class: "form-label" %>
-          <%= form.text_field :confirmation_code, required: true, class: "form-control text-center", data: { form_validation_target: "code" }, placeholder: "1234" %>
+          <%= form.text_field :confirmation_code,
+                              required: true,
+                              class: "form-control text-center",
+                              data: { form_validation_target: "code" },
+                              placeholder: "1234",
+                              autocomplete: "one-time-code",
+                              inputmode: "numeric" %>
         </div>
 
         <div class="d-grid">
-          <%= form.submit "Verify", class: "btn btn-success btn-lg" %>
+          <%= form.submit "Verify", class: "btn custom-red-btn w-100 me-5" %>
         </div>
       <% end %>
     </div>

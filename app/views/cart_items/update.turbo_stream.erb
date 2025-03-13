@@ -1,0 +1,21 @@
+<turbo-stream action="replace" target="cart-items">
+  <template>
+    <%= render partial: "carts/cart_items", formats: [:html], locals: { cart_items: @cart_items } %>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="update" target="cart-count">
+  <template>
+      <%= @cart_items_count %>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="cart-total-price">
+  <template>
+         <h4 id="cart-total-price" class="text-end mt-3 text-success">Итого <%= @cart_total_price %> ₽
+    </h4>
+  </template>
+</turbo-stream>
+
+
+

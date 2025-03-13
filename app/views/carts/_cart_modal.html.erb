@@ -1,0 +1,21 @@
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cartModalLabel">Ваша корзина</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <div id="cart-items">
+          <%= render 'carts/cart_items', cart_items: @cart_items %>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= link_to 'Оформить заказ', orders_path, class: 'btn btn-success' %>
+
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
