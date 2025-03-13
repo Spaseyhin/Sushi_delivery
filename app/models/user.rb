@@ -5,6 +5,7 @@
 # - Генерацию и валидацию OTP-кодов (`generate_confirmation_code!`, `valid_confirmation_code?`)
 # - Верификацию пользователя (`verify`)
 class User < ApplicationRecord
+  has_one :cart, dependent: :destroy
   validates :phone_number, presence: true, uniqueness: true
   validates :confirmation_code, length: { is: 4 }, allow_nil: true
 
