@@ -1,2 +1,26 @@
-<h1>Orders#index</h1>
-<p>Find me in app/views/orders/index.html.erb</p>
+<% @orders.each do |order| %>
+
+  <div class="receipt mb-4 p-3">
+    <h4 class="text-center fw-bold mb-3">ЧЕК</h4>
+    <p class="dashed-line">Дата заказа: <%= l(order.created_at, format: :short) %></p>
+    <p class="dashed-line">Доставка по адресу: <%= order.user.address %></p>
+
+    <ul class="list-unstyled">
+      <% order.order_items.each do |item| %>
+        <li>
+          <span><%= item.product.name %> x <%= item.quantity %></span>
+          <span><%= (item.price * item.quantity).round(2) %> ₽</span>
+        </li>
+      <% end %>
+    </ul>
+
+    <p class="dashed-line"></p>
+
+    <div class="total">
+      <span>ИТОГО:</span>
+      <span><%= order.total_price %> ₽</span>
+    </div>
+
+    <div class="order-number">Заказ № <%= order.order_number %></div>
+  </div>
+<% end %>

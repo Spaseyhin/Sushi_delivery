@@ -1,7 +1,6 @@
 <turbo-stream action="replace" target="auth_form">
   <template>
     <div id="auth_form">
-      <% Rails.logger.info "📌 Flash alert: #{flash[:alert]}" %>
 
       <% if flash[:alert] %>
         <div class="alert alert-danger">
@@ -9,24 +8,23 @@
         </div>
       <% end %>
 
-      <p class="alert alert-info"><strong>Your Code: <%= user&.confirmation_code || "N/A" %></strong></p>
+      <p class="alert alert-info"><strong>Ваш проверочный код: <%= user&.confirmation_code || "N/A" %></strong></p>
 
       <%= form_with url: verify_user_path, local: false, class: "needs-validation", data: { controller: "form-validation" } do |form| %>
         <%= form.hidden_field :phone_number, value: user.phone_number %>
 
         <div class="mb-3 text-start">
-          <%= form.label :confirmation_code, "Enter Confirmation Code", class: "form-label" %>
+          <%= form.label :confirmation_code, "Введите проверочный код: ", class: "form-label" %>
           <%= form.text_field :confirmation_code,
                               required: true,
                               class: "form-control text-center",
                               data: { form_validation_target: "code" },
-                              placeholder: "1234",
                               autocomplete: "one-time-code",
                               inputmode: "numeric" %>
         </div>
 
         <div class="d-grid">
-          <%= form.submit "Verify", class: "btn custom-red-btn w-100 me-5" %>
+          <%= form.submit "Ввести", class: "btn custom-red-btn w-100 me-5" %>
         </div>
       <% end %>
     </div>

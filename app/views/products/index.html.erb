@@ -1,36 +1,27 @@
-<div class="container py-4">
-  <div class="row justify-content-center g-2">
-    <% @products.each do |product| %>
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 d-flex"> <!-- 5 в ряд -->
+<div class="row justify-content-center g-2">
+  <% @products.each do |product| %>
+    <div class="col-md-3">
+      <div class="card h-100 border-0 shadow-sm d-flex flex-column justify-content-between card-hover" style="transition: transform 0.3s ease;">
+        
+        <!-- Фото -->
+        <% if product.image.attached? %>
+          <%= image_tag product.image.variant(resize_to_limit: [300, 300]), class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
+        <% else %>
+          <%= image_tag "2.png", width: 300, height: 300, class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
+        <% end %>
 
-        <turbo-frame id="product-<%= product.id %>" class="w-100">
-          <div class="card h-100 border-0 shadow-sm d-flex flex-column justify-content-between card-hover" style="transition: transform 0.3s ease;">
+        <!-- Описание -->
+        <div class="card-body text-center p-2">
+          <h6 class="card-title mb-1 fw-bold"><%= product.name %></h6>
+          <p class="card-text mb-2 text-muted small"><%= product.description %></p>
+        </div>
 
-            <!-- Фото без отступов -->
-            <% if product.image.attached? %>
-              <%= image_tag product.image.variant(resize_to_limit: [300, 300]), class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
-            <% else %>
-              <%= image_tag "2.png", width: 300, height: 300, class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
-            <% end %>
-
-            <!-- Описание -->
-            <div class="card-body text-center p-2">
-              <h6 class="card-title mb-1 fw-bold"><%= product.name %></h6>
-              <p class="card-text mb-2 text-muted small"><%= product.description %></p>
-            </div>
-
-            <!-- Кнопка -->
-            <div class="p-2">
-              <%= form_with url: cart_items_path, method: :post, data: { turbo_stream: true } do %>
-                <%= hidden_field_tag :product_id, product.id %>
-                <%= submit_tag "#{product.price} ₽", class: "btn custom-red-btn w-100" %>
-              <% end %>
-            </div>
-
-          </div>
-        </turbo-frame>
+        <!-- Кнопки управления количеством -->
+        <div class="p-2">
+          <%= render partial: 'products/product', locals: { product: product, quantity: @cart_items_hash[product.id] || 0 } %>
+        </div>
 
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>

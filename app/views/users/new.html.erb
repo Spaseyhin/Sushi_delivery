@@ -1,6 +1,6 @@
 <div class="container d-flex justify-content-center align-items-center">
   <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
-    <h2 class="text-center mb-3">Register</h2>
+    <h2 class="text-center mb-3">Регистрация</h2>
 
     <% if flash[:notice] %>
       <div class="alert alert-success text-center">
@@ -11,7 +11,7 @@
     <%= turbo_frame_tag "auth_form" do %>
       <%= form_with url: users_path, local: false, class: "needs-validation", data: { controller: "form-validation" } do |form| %>
         <div class="mb-3">
-          <%= form.label :phone_number, "Phone Number", class: "form-label" %>
+          <%= form.label :phone_number, "Номер телефона", class: "form-label" %>
           <%= form.text_field :phone_number, 
                 required: true, 
                 class: "form-control", 
@@ -20,7 +20,7 @@
         </div>
 
         <div class="d-grid">
-          <%= form.submit "Send Code", class: "btn custom-red-btn w-100 me-5" %>
+          <%= form.submit "Отправить код", class: "btn custom-red-btn w-100 me-5" %>
         </div>
       <% end %>
     <% end %>

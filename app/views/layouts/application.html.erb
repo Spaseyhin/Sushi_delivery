@@ -1,79 +1,103 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>SushiDelivery</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title>SushiDelivery</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+</head>
 
-  </head>
-  <body>
-    <div class="container-fluid px-4 py-3">
-      <div class="container">
-        <header class="d-flex justify-content-center py-3 ">
-          <ul class="nav nav-pills gap-4">
-              <a href="<%= root_path %>" class="text-decoration-none">
-                <span class="logo-title">SUSHI</span>
-              </a>
-            <li class="nav-item">
-              <div id="header-cart">
-                <!-- Иконка корзины, открывающая модалку -->
-                <a href="#" 
-                  class="text-decoration-none text-dark d-flex flex-column align-items-center position-relative"
-                  data-bs-toggle="modal" 
-                  data-bs-target="#cartModal">
-                  <div class="position-relative">
-                    <i class="bi bi-basket" style="font-size: 2.5rem;"></i>
-                    <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                      <%= @cart_items_count || 0 %>
-                    </span>
-                  </div>
-                </a>
-              </div>
-            </li>
-            <li class="nav-item">
-              <!-- Блок пользователя -->
-              <div class="d-flex justify-content-end mb-3">
-                <% if logged_in? %>
-                  <%= button_to "Logout", logout_path, method: :delete, class: "btn custom-red-btn w-100 me-5", form_class: "d-inline" %>
-                <% else %>
-                  <%= button_to "Login", new_user_path, method: :get, class: "btn custom-red-btn w-100 me-5", form_class: "d-inline" %>
-                <% end %> 
-              </div>
-            </li>
-          </ul>
-        </header>
+<body>
+  <% if flash[:notice] %>
+  <div class="alert alert-success text-center mb-4" role="alert">
+    <strong><%= flash[:notice] %></strong>
+  </div>
+<% end %>
+  <!-- Главный контейнер -->
+  <div class="main-wrapper py-3">
+
+    <!-- Header -->
+    <header class="d-flex align-items-center justify-content-between py-3 mb-4">
+      <!-- Лого + Адрес -->
+      <div class="d-flex align-items-center gap-3">
+        <a href="<%= root_path %>" class="d-inline-flex link-body-emphasis text-decoration-none">
+          <span class="logo-title">SUSHIIII</span>
+        </a>
+
+        <% if logged_in? %>
+          <!-- Адрес -->
+          <div class="address-box" id="edit-address-btn" data-bs-toggle="modal" data-bs-target="#addressModal" role="button">
+            <% if current_user.address.present? %>
+              <small class="text-muted">Доставим заказ на:</small>
+              <strong><%= current_user.address %></strong>
+            <% else %>
+              <strong>Указать адрес доставки</strong>
+            <% end %>
+          </div>
+        <% end %>
       </div>
-    </div>
-    <% flash.each do |key, message| %>
-      <div class="alert alert-<%= key == 'notice' ? 'success' : 'danger' %> alert-dismissible fade show" role="alert">
-        <%= message %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+      <!-- Корзина и авторизация -->
+      <div class="d-flex align-items-center gap-3">
+        <!-- Корзина -->
+        <a href="#"
+          class="text-decoration-none text-dark d-flex align-items-center position-relative"
+          data-bs-toggle="modal"
+          data-bs-target="#cartModal">
+          <i class="bi bi-basket" style="font-size: 2.5rem;"></i>
+          <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            <%= @cart_items_count || 0 %>
+          </span>
+        </a>
+
+        <!-- Вход / Выход -->
+        <% if logged_in? %>
+        <%= button_to 'Мои заказы', orders_path,method: :get, class: 'btn custom-red-btn w-100 me-5' %>
+        
+          <%= button_to "Выйти", logout_path, method: :delete, class: "btn custom-red-btn w-100 me-5", form_class: "d-inline" %>
+        <% else %>
+          <%= button_to "Войти", new_user_path, method: :get, class: "btn custom-red-btn w-100 me-5", form_class: "d-inline" %>
+        <% end %>
       </div>
-    <% end %>
+    </header>
+
+    <!-- Контент -->
     <%= yield %>
-    <%= render 'carts/cart_modal' %>
-    <!-- Модальное окно для корзины -->
-    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
+
+  </div>
+
+  <!-- Модалка корзины -->
+  <%= render 'carts/cart_modal' %>
+
+  <!-- Модалка адреса -->
+  <% if logged_in? %>
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="cartModalLabel">Ваша корзина</h5>
+            <h5 class="modal-title" id="addressModalLabel">Введите адрес доставки</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
           </div>
           <div class="modal-body">
-            <turbo-frame id="cart-frame">
-              <!-- Корзина загрузится сюда -->
-            </turbo-frame>
+            <%= form_with model: current_user, url: update_address_users_path, method: :patch, local: true do |f| %>
+              <div class="mb-3">
+                <%= f.label :address, 'Адрес', class: 'form-label' %>
+                <%= f.text_field :address, class: 'form-control', value: current_user.address %>
+              </div>
+              <div class="text-end">
+                <%= f.submit 'Сохранить', class: 'btn custom-red-btn w-100 me-5' %>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
-  </body>
-</html>
+  <% end %>
 
+</body>
+</html>

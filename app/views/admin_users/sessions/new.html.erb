@@ -1,0 +1,29 @@
+<h2 class="text-center mb-4">Вход в админ панель</h2>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+
+      <!-- Flash сообщения -->
+      <% flash.each do |key, message| %>
+        <p class="alert alert-<%= key == 'notice' ? 'info' : 'danger' %> text-center small mb-3 py-2"><strong><%= message %></strong></p>
+      <% end %>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="mb-3">
+          <%= f.label :email, 'Email', class: 'form-label' %>
+          <%= f.email_field :email, autofocus: true, class: 'form-control' %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, 'Пароль', class: 'form-label' %>
+          <%= f.password_field :password, autocomplete: "current-password", class: 'form-control' %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.submit "Войти", class: "btn custom-red-btn w-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

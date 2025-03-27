@@ -1,2 +1,7 @@
-<h1>Orders#show</h1>
-<p>Find me in app/views/orders/show.html.erb</p>
+<h1>Заказ №<%= @order.id %></h1>
+
+<p><strong>Дата:</strong> <%= l(@order.created_at, format: :long) %></p>
+<p><strong>Сумма:</strong> <%= @order.cart_total_price %> ₽</p>
+<p><strong>Адрес доставки:</strong> <%= @order.address %></p>
+
+<a href="<%= orders_path %>" class="btn btn-secondary mt-3">Назад к заказам</a>

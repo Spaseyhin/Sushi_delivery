@@ -1,0 +1,14 @@
+<!--  Вот этот кусок новый — обновляет бейдж над кнопкой -->
+<turbo-stream action="replace" target="product-<%= params[:product_id] %>-count">
+  <template>
+    <% quantity = @cart.cart_items.where(product_id: params[:product_id]).sum(:quantity) %>
+    <% if quantity > 0 %>
+      <span id="product-<%= params[:product_id] %>-count"
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        <%= quantity %>
+      </span>
+    <% else %>
+      <span id="product-<%= params[:product_id] %>-count"></span>
+    <% end %>
+  </template>
+</turbo-stream>
