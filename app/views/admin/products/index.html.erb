@@ -1,0 +1,35 @@
+<div class="container-fluid py-4" style="padding-left: 250px; padding-right: 250px;">
+  <div class="row justify-content-center g-2">
+    <% @products.each do |product| %>
+      <div class=" col-md-3"> 
+
+        <div class="card h-100 border-0 shadow-sm d-flex flex-column justify-content-between card-hover" style="transition: transform 0.3s ease;">
+
+          <!-- Фото без отступов -->
+          <% if product.image.attached? %>
+            <%= image_tag product.image.variant(resize_to_limit: [300, 300]), class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
+          <% else %>
+            <%= image_tag "2.png", width: 300, height: 300, class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
+          <% end %>
+
+          <!-- Описание -->
+          <div class="card-body text-center p-2">
+            <h6 class="card-title mb-1 fw-bold"><%= product.name %></h6>
+            <p class="card-text mb-2 text-muted small"><%= product.description %></p>
+            <p class="fw-bold"><%= product.price %> ₽</p>
+          </div>
+
+          <!-- Кнопки -->
+          <div class="p-2 d-flex justify-content-between gap-2">
+            <%= link_to 'Редактировать', edit_admin_product_path(product), class: 'btn btn-outline-danger btn-sm w-100' %>
+            <%= button_to 'Удалить', admin_product_path(product), method: :delete, data: { confirm: 'Точно удалить?' }, class: 'btn btn-outline-danger btn-sm w-100' %>
+          </div>
+
+        </div>
+        
+
+      </div>
+    <% end %>
+    
+  </div>
+</div>
