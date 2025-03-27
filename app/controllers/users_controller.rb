@@ -8,16 +8,16 @@
 # OTP хранится в базе данных и удаляется после успешной проверки или истечения срока.
 class UsersController < ApplicationController
   before_action :set_user, only: %i[create verify]
+  before_action :authenticate_user!, only: %i[address update_address] # Проверка на вход
 
   def new
+    session[:order_now] = params[:order_now] if params[:order_now].present?
     @user = User.new
   end
 
   # Создаёт и отправляет OTP пользователю
   def create
     @user.generate_confirmation_code!
-    Rails.logger.info "✅ Сгенерирован OTP для #{@user.phone_number}: #{@user.confirmation_code}"
-
     respond_to do |format|
       format.turbo_stream { render partial: 'users/create', locals: { user: @user } }
     end
@@ -40,15 +40,75 @@ class UsersController < ApplicationController
     redirect_to root_path # Возвращаем на главную (и там создается новая корзина)
   end
 
+  # ➤ Форма адреса
+  # ⚙️ Новый экшен для показа формы адреса
+  def address
+    @user = current_user
+  end
+
+  # Обновить адрес
+  def update_address
+    if current_user.update(user_params)
+      process_order_if_needed # Проверяем и создаем заказ, если нужно
+    else
+      flash.now[:alert] = 'Ошибка при сохранении адреса.'
+      render :edit
+    end
+  end
+
+  # Проверить нужно ли оформлять заказ
+  def process_order_if_needed
+    if session[:order_now] && current_cart.cart_items.any?
+      session.delete(:order_now) # Очистить метку, чтобы не создать повторно
+
+      order = create_order # Создаем заказ
+      copy_cart_items_to_order(order) # Переносим товары
+      clear_cart # Очищаем корзину
+
+      redirect_to orders_path, notice: 'Спасибо за заказ! Оператор в скором времени с вами свяжется для уточнения.'
+    else
+      redirect_to root_path, notice: 'Адрес успешно сохранен.'
+    end
+  end
+
+  # Создать заказ
+  def create_order
+    current_user.orders.create!(
+      total_price: current_cart.cart_items.includes(:product).sum { |item| item.product.price * item.quantity },
+      order_number: current_user.orders.maximum(:order_number).to_i + 1
+    )
+  end
+
+  # Копировать товары из корзины в заказ
+  def copy_cart_items_to_order(order)
+    current_cart.cart_items.each do |cart_item|
+      order.order_items.create!(
+        product: cart_item.product,
+        quantity: cart_item.quantity,
+        price: cart_item.product.price
+      )
+    end
+  end
+
+  # Очистить корзину
+  def clear_cart
+    current_cart.cart_items.destroy_all
+  end
+
+  # Разрешенные параметры
   private
+
+  def user_params
+    params.require(:user).permit(:address)
+  end
 
   # Ищем пользователя по номеру телефона
   def set_user
     @user = User.find_or_create_by(phone_number: params[:phone_number])
   end
 
-  # Авторизует пользователя
-  # Авторизует пользователя
+  # Авторизация пользователя
+
   def log_in_user
     session[:user_id] = @user.id
 
@@ -57,7 +117,7 @@ class UsersController < ApplicationController
     # Создаем корзину для пользователя, если нет
     user_cart = @user.cart || @user.create_cart
 
-    if guest_cart && guest_cart.cart_items.any?
+    if guest_cart&.cart_items&.any?
       # Переносим товары из гостевой корзины в корзину пользователя
       guest_cart.cart_items.each do |item|
         existing_item = user_cart.cart_items.find_by(product_id: item.product_id)
@@ -74,22 +134,36 @@ class UsersController < ApplicationController
       # Удаляем гостевую корзину
       guest_cart.destroy
 
-      Rails.logger.info '✅ Товары из гостевой корзины перенесены и корзина удалена'
     end
 
     # Привязываем корзину пользователя к сессии
     session[:cart_id] = user_cart.id
 
-    redirect_to root_path
+    #  Проверяем, есть ли адрес
+    if @user.address.blank?
+      redirect_to address_users_path #  если нет адреса — перенаправляем на ввод
+    else
+      redirect_to root_path # иначе на главную
+    end
   end
 
   # Обрабатывает неверный код
   def handle_invalid_otp
     flash.now[:alert] = I18n.t('users.otp_invalid')
-    Rails.logger.info '❌ Ошибка: неверный код! Отправляем Turbo Stream.'
+    Rails.logger.info ' Ошибка: неверный код! Отправляем Turbo Stream.'
 
     respond_to do |format|
       format.turbo_stream { render partial: 'users/create', locals: { user: @user } }
     end
+  end
+
+  # ➤ Сильные параметры для адреса
+  def address_params
+    params.require(:user).permit(:address)
+  end
+
+  # ➤ Проверка входа пользователя
+  def authenticate_user!
+    redirect_to new_user_path unless current_user
   end
 end
