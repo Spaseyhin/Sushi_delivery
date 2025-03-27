@@ -47,5 +47,10 @@ class ApplicationController < ActionController::Base
     @cart_items = @cart.cart_items.includes(product: [image_attachment: :blob]).joins(:product).order('products.name ASC') # по алфавиту
     @cart_items_count = @cart.cart_items.sum(:quantity)
     @cart_total_price = @cart_items.sum { |item| item.product.price * item.quantity }
+
+    # Новый хэш для удобного поиска количества товара
+    @cart_items_hash = @cart_items.each_with_object({}) do |item, hash|
+      hash[item.product_id] = item.quantity
+    end
   end
 end

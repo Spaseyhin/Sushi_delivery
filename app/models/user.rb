@@ -6,6 +6,7 @@
 # - Верификацию пользователя (`verify`)
 class User < ApplicationRecord
   has_one :cart, dependent: :destroy
+  has_many :orders, dependent: :destroy
   validates :phone_number, presence: true, uniqueness: true
   validates :confirmation_code, length: { is: 4 }, allow_nil: true
 
