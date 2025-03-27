@@ -16,11 +16,14 @@ class CartItemsController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          # ✅ Обновить саму модалку корзины
+          #  Обновить корзину (модалку)
           turbo_stream.update('cart-frame', partial: 'carts/cart_items',
                                             locals: { cart_items: @cart_items, cart_total_price: @cart_total_price }),
-          # ✅ Обновить счетчик товаров
-          turbo_stream.update('cart-count', @cart_items_count)
+          #  Обновить счетчик корзины
+          turbo_stream.update('cart-count', @cart_items_count),
+          #  Обновить карточку именно этого товара
+          turbo_stream.replace("product-#{product.id}", partial: 'products/product',
+                                                        locals: { product: product, quantity: @cart_items_hash[product.id] || 0 })
         ]
       end
       format.html { redirect_to root_path, notice: 'Товар добавлен в корзину' }
@@ -40,7 +43,20 @@ class CartItemsController < ApplicationController
     load_cart_items
 
     respond_to do |format|
-      format.turbo_stream
+      format.turbo_stream do
+        render turbo_stream: [
+          #  Обновить корзину (модалку)
+          turbo_stream.update('cart-frame', partial: 'carts/cart_items',
+                                            locals: { cart_items: @cart_items, cart_total_price: @cart_total_price }),
+          #  Обновить счетчик корзины
+          turbo_stream.update('cart-count', @cart_items_count),
+          #  Обновить карточку товара
+          turbo_stream.replace("product-#{cart_item.product.id}", partial: 'products/product',
+                                                                  locals: { product: cart_item.product,
+                                                                            quantity: @cart_items_hash[cart_item.product.id] || 0 })
+        ]
+      end
+      format.html { redirect_to root_path, notice: 'Корзина обновлена' }
     end
   end
 

@@ -50,6 +50,16 @@
     background-color: #d32f2f; /* Цвет при наведении */
     color: white;
   }
+  .custom-outline-secondary {
+    background-color: #e9ecf2; /* Серый цвет */
+    font-weight: bold; /* Жирный текст */
+    border-radius: 12px; /* Закругленные углы */
+    padding: 10px 0; /* Вертикальные отступы */
+    border: none; /* Без рамки */
+    font-size: 16px; /* Чуть побольше шрифт */
+  
+  }
+
   .logo-title {
     font-family: 'Poppins', sans-serif;
     font-weight: 700; /* Жирный */
@@ -65,5 +75,106 @@
   .card-hover:hover {
     transform: scale(1.05); /* Увеличение на 5% */
     z-index: 10; /* Чтобы не перекрывались */
+  }
+  .receipt {
+    max-width: 360px;
+    margin: 0 auto 20px;
+    padding: 20px;
+    background: white;
+    border: 2px dashed #ccc;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.6;
+ 
+  
+    h4 {
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+  
+    .dashed-line {
+      border-bottom: 1px dashed #ccc;
+      margin: 10px 0;
+    }
+  
+    ul {
+      padding: 0;
+      margin: 0 0 10px;
+      list-style: none;
+    }
+  
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+  
+    .total {
+      font-weight: bold;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+    }
+  
+    .order-number {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #555;
+    }
+  }
+  
+  .address-box {
+    background: #f1f1f1;
+    padding: 8px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.2;
+    cursor: pointer;
+    min-width: 250px;
+    text-align: left;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .address-box:hover {
+    background: #e9e9e9;
+  }
+  
+  .address-box strong {
+    font-weight: 700;
+    display: block;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .address-box small {
+    display: block;
+    margin-bottom: 2px;
+  }
+  
+  
+  
+  .main-wrapper {
+    padding-left: 250px;
+    padding-right: 250px;
+  }
+  
+  .cart-counter-btn::before {
+    content: "";
+    position: absolute;
+    top: 15%;
+    bottom: 15%;
+    left: 50%;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateX(-50%);
+    z-index: 0;
   }
   

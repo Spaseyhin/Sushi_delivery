@@ -1,40 +1,40 @@
 <turbo-frame id="cart-frame">
   <div id="cart-items" class="container">
     <% cart_items.each do |item| %>
-      <div class="row align-items-center border-bottom py-3">
-        <!-- Левая часть -->
-        <div class="col-4 d-flex align-items-center">
-
+      <div class="row align-items-center py-3 border-bottom">
+        <!-- Левая часть: фото + название -->
+        <div class="col-4 d-flex align-items-center gap-2">
           <% if item.product.image.attached? %>
-            <%= image_tag url_for(item.product.image.variant(resize_to_limit: [80, 80])), class: "img-fluid rounded" if item.product.image.attached? %>
+            <%= image_tag url_for(item.product.image.variant(resize_to_limit: [80, 80])), class: "img-fluid rounded" %>
           <% else %>
-            <%= image_tag "2.png", width: 150, class: "mb-3 rounded", loading: "lazy" %>
+            <%= image_tag "2.png", width: 80, class: "img-fluid rounded" %>
           <% end %>
-      
           <div>
-            <h5 class="mb-1"><%= item.product.name %></h5>
-            <p class="mb-0 text-muted">Цена: <%= item.product.price %> ₽</p>
+            <h6 class="mb-1"><%= item.product.name %></h6>
+            <small class="text-muted">Цена: <%= item.product.price %> ₽</small>
           </div>
         </div>
 
-        <!-- Центральная часть -->
+        <!-- Центральная часть: кнопки + количество -->
         <div class="col-4 d-flex justify-content-center align-items-center">
-          <div class="d-flex align-items-center" style="gap: 10px;">
+          <div class="d-flex align-items-center gap-2">
             <%= button_to '-', cart_item_path(item, change: -1), method: :patch, form: { data: { turbo_stream: true } }, class: "btn btn-outline-secondary btn-sm" %>
             <span style="min-width: 32px; text-align: center;"><%= item.quantity %></span>
             <%= button_to '+', cart_item_path(item, change: 1), method: :patch, form: { data: { turbo_stream: true } }, class: "btn btn-outline-secondary btn-sm" %>
           </div>
         </div>
 
-        <!-- Правая часть -->
+        <!-- Правая часть: итоговая цена товара -->
         <div class="col-4 text-end">
           <p class="fw-bold mb-0">= <%= item.product.price * item.quantity %> ₽</p>
         </div>
       </div>
     <% end %>
-    <!-- ✅ Итоговая сумма -->
-    <h4 id="cart-total-price" class="text-end mt-3 text-success">Итого <%= @cart_total_price %> ₽
-    </h4>
+
+    <!-- ✅ Блок с итогом и кнопкой -->
+    <div class="d-flex justify-content-between align-items-center py-3">
+      <h4 class="m-0">Итого: <%= @cart_total_price %> ₽</h4>
+
+    </div>
   </div>
 </turbo-frame>
-
