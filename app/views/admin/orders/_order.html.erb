@@ -1,10 +1,10 @@
 
 
 <div class="receipt mb-4 p-3" id="order_<%= order.id %>">
-  <h4 class="text-center fw-bold mb-3">ЧЕК</h4>
-  <p class="dashed-line">Дата заказа: <%= l(order.created_at, format: :short) %></p>
-  <p class="dashed-line">Доставка по адресу: <%= order.user.address %></p>
-  <p class="dashed-line">Телефон: <%= order.user.phone_number %></p>
+  <h4 class="text-center fw-bold mb-3"><%=t('receipt.title')%></h4>
+  <p class="dashed-line"><%=t('receipt.order_date')%>: <%= l(order.created_at, format: :short) %></p>
+  <p class="dashed-line"><%=t('receipt.adress')%>: <%= order.user.address %></p>
+  <p class="dashed-line"><%=t('receipt.phone')%>: <%= order.user.phone_number %></p>
 
   <ul class="list-unstyled">
     <% order.order_items.each do |item| %>
@@ -18,8 +18,9 @@
   <p class="dashed-line"></p>
 
   <div class="total">
-    <span>ИТОГО:</span>
+    <span><%= t('cart.total')%> :</span>
     <span><%= order.total_price %> ₽</span>
     
   </div>
 </div>
+

@@ -5,29 +5,32 @@
         <div class="card-body p-4">
 
 
-          <%= form_with model: [:admin, @product], local: true do |f| %>
+ 
+          <%= form_with model: [:admin, @product], local: true, html: { multipart: true } do |f| %>
+
             
             <!-- Название -->
             <div class="mb-3">
-              <%= f.label :name, 'Название', class: 'form-label fw-semibold' %>
+              <%= f.label :name, t('create_product.name'), class: 'form-label fw-semibold' %>
               <%= f.text_field :name, class: 'form-control', placeholder: 'Введите название' %>
             </div>
 
             <!-- Описание -->
             <div class="mb-3">
-              <%= f.label :description, 'Описание', class: 'form-label fw-semibold' %>
+              <%= f.label :description, t('create_product.description'), class: 'form-label fw-semibold' %>
               <%= f.text_area :description, rows: 3, class: 'form-control', placeholder: 'Введите описание' %>
             </div>
 
             <!-- Цена -->
             <div class="mb-3">
-              <%= f.label :price, 'Цена (₽)', class: 'form-label fw-semibold' %>
+              <%= f.label :price, t('cart.price'), class: 'form-label fw-semibold' %>
+
               <%= f.number_field :price, step: 0.01, class: 'form-control', placeholder: 'Введите цену' %>
             </div>
 
             <!-- Фото -->
             <div class="mb-3">
-              <%= f.label :image, 'Фото', class: 'form-label fw-semibold' %>
+              <%= f.label :image, t('create_product.photo'), class: 'form-label fw-semibold' %>
               <%= f.file_field :image, class: 'form-control' %>
 
               <% if f.object.image.attached? %>
@@ -39,8 +42,8 @@
 
             <!-- Кнопки -->
             <div class="d-flex justify-content-between mt-4">
-              <%= f.submit 'Сохранить', class: 'btn custom-red-btn w-50 me-2' %>
-              <%= link_to 'Назад', admin_products_path, class: 'btn btn-secondary w-50' %>
+              <%= f.submit t('create_product.button_create'), class: 'btn custom-red-btn w-50 me-2' %>
+              <%= link_to t('create_product.back'), admin_products_path, class: 'btn btn-secondary w-50' %>
             </div>
 
           <% end %>
