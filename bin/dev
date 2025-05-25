@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# запускает сервер с Procfile.dev
+exec foreman start -f Procfile.dev
