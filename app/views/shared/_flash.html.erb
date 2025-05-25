@@ -1,0 +1,13 @@
+<% if flash[:notice] %>
+  <div class="custom-flash alert alert-success text-center">
+    <span><%= flash[:notice] %></span>
+    <button class="close-btn" onclick="this.parentElement.remove()">×</button>
+  </div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="custom-flash alert alert-danger text-center">
+    <span><%= flash[:alert] %></span>
+    <button class="close-btn" onclick="this.parentElement.remove()">×</button>
+  </div>
+<% end %>
