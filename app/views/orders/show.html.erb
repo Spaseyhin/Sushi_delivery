@@ -2,6 +2,9 @@
 
 <p><strong>Дата:</strong> <%= l(@order.created_at, format: :long) %></p>
 <p><strong>Сумма:</strong> <%= @order.cart_total_price %> ₽</p>
-<p><strong>Адрес доставки:</strong> <%= @order.address %></p>
+<p><strong><%= t('receipt.address')%>:</strong> <%= @order.address %></p>
 
 <a href="<%= orders_path %>" class="btn btn-secondary mt-3">Назад к заказам</a>
+
+
+
