@@ -51,7 +51,7 @@ class UsersController < ApplicationController
     if current_user.update(user_params)
       process_order_if_needed # Проверяем и создаем заказ, если нужно
     else
-      flash.now[:alert] = 'Ошибка при сохранении адреса.'
+      flash.now[:alert] = t('users.address_save_error')
       render :edit
     end
   end
@@ -59,43 +59,16 @@ class UsersController < ApplicationController
   # Проверить нужно ли оформлять заказ
   def process_order_if_needed
     if session[:order_now] && current_cart.cart_items.any?
-      session.delete(:order_now) # Очистить метку, чтобы не создать повторно
+      session.delete(:order_now)
 
-      order = create_order # Создаем заказ
-      copy_cart_items_to_order(order) # Переносим товары
-      clear_cart # Очищаем корзину
+      Order.create_from_cart!(current_user, current_cart)
 
-      redirect_to orders_path, notice: 'Спасибо за заказ! Оператор в скором времени с вами свяжется для уточнения.'
+      redirect_to orders_path, notice: t('orders.success_message')
     else
-      redirect_to root_path, notice: 'Адрес успешно сохранен.'
+      redirect_to root_path
     end
   end
 
-  # Создать заказ
-  def create_order
-    current_user.orders.create!(
-      total_price: current_cart.cart_items.includes(:product).sum { |item| item.product.price * item.quantity },
-      order_number: current_user.orders.maximum(:order_number).to_i + 1
-    )
-  end
-
-  # Копировать товары из корзины в заказ
-  def copy_cart_items_to_order(order)
-    current_cart.cart_items.each do |cart_item|
-      order.order_items.create!(
-        product: cart_item.product,
-        quantity: cart_item.quantity,
-        price: cart_item.product.price
-      )
-    end
-  end
-
-  # Очистить корзину
-  def clear_cart
-    current_cart.cart_items.destroy_all
-  end
-
-  # Разрешенные параметры
   private
 
   def user_params
@@ -104,42 +77,16 @@ class UsersController < ApplicationController
 
   # Ищем пользователя по номеру телефона
   def set_user
-    @user = User.find_or_create_by(phone_number: params[:phone_number])
+    @user = User.find_or_initialize_by_phone(params[:phone_number])
   end
 
   # Авторизация пользователя
 
-  def log_in_user
-    session[:user_id] = @user.id
+  def create_cart
+    @user_cart = @user.cart || @user.create_cart
+  end
 
-    guest_cart = Cart.find_by(id: session[:cart_id]) # Гостевая корзина
-
-    # Создаем корзину для пользователя, если нет
-    user_cart = @user.cart || @user.create_cart
-
-    if guest_cart&.cart_items&.any?
-      # Переносим товары из гостевой корзины в корзину пользователя
-      guest_cart.cart_items.each do |item|
-        existing_item = user_cart.cart_items.find_by(product_id: item.product_id)
-
-        if existing_item
-          # Если товар уже есть в корзине пользователя — увеличиваем количество
-          existing_item.update(quantity: existing_item.quantity + item.quantity)
-        else
-          # Если товара нет — добавляем
-          user_cart.cart_items.create(product_id: item.product_id, quantity: item.quantity)
-        end
-      end
-
-      # Удаляем гостевую корзину
-      guest_cart.destroy
-
-    end
-
-    # Привязываем корзину пользователя к сессии
-    session[:cart_id] = user_cart.id
-
-    #  Проверяем, есть ли адрес
+  def redirect_unless_address_present
     if @user.address.blank?
       redirect_to address_users_path #  если нет адреса — перенаправляем на ввод
     else
@@ -147,19 +94,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def log_in_user
+    @user.log_in!(session)
+    redirect_unless_address_present
+  end
+
   # Обрабатывает неверный код
   def handle_invalid_otp
-    flash.now[:alert] = I18n.t('users.otp_invalid')
-    Rails.logger.info ' Ошибка: неверный код! Отправляем Turbo Stream.'
-
+    flash.now[:alert] = t('users.otp_invalid')
     respond_to do |format|
       format.turbo_stream { render partial: 'users/create', locals: { user: @user } }
     end
-  end
-
-  # ➤ Сильные параметры для адреса
-  def address_params
-    params.require(:user).permit(:address)
   end
 
   # ➤ Проверка входа пользователя

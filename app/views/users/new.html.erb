@@ -1,17 +1,11 @@
 <div class="container d-flex justify-content-center align-items-center">
   <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
-    <h2 class="text-center mb-3">Регистрация</h2>
-
-    <% if flash[:notice] %>
-      <div class="alert alert-success text-center">
-        <strong><%= flash[:notice] %></strong>
-      </div>
-    <% end %>
+<h2 class="text-center mb-3"><%= t('registration.title') %></h2>
 
     <%= turbo_frame_tag "auth_form" do %>
       <%= form_with url: users_path, local: false, class: "needs-validation", data: { controller: "form-validation" } do |form| %>
         <div class="mb-3">
-          <%= form.label :phone_number, "Номер телефона", class: "form-label" %>
+          <%= form.label :phone_number, t('registration.phone_number'), class: "form-label" %>
           <%= form.text_field :phone_number, 
                 required: true, 
                 class: "form-control", 
@@ -20,7 +14,7 @@
         </div>
 
         <div class="d-grid">
-          <%= form.submit "Отправить код", class: "btn custom-red-btn w-100 me-5" %>
+          <%= form.submit t('buttons.send_code'), class: "btn custom-red-btn w-100 me-5" %>
         </div>
       <% end %>
     <% end %>

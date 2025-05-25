@@ -1,27 +1,15 @@
 <div class="container d-flex justify-content-center align-items-center">
   <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
-    <h2 class="text-center mb-3">Адрес доставки</h2>
-
-    <% if flash[:notice] %>
-      <div class="alert alert-success text-center">
-        <strong><%= flash[:notice] %></strong>
-      </div>
-    <% end %>
-
-    <% if flash[:alert] %>
-      <div class="alert alert-danger text-center">
-        <strong><%= flash[:alert] %></strong>
-      </div>
-    <% end %>
+    <h2 class="text-center mb-3"><%=t('receipt.address')%></h2>
 
     <%= form_with model: current_user, url: update_address_users_path, method: :patch, local: true, class: "needs-validation", data: { controller: "form-validation" } do |f| %>
       <div class="mb-3">
-        <%= f.label :address, 'Введите ваш адрес', class: 'form-label' %>
+        <%= f.label :address, t('adress.title'), class: 'form-label' %>
         <%= f.text_field :address, class: "form-control", required: true, data: { form_validation_target: "address" } %>
       </div>
 
       <div class="d-grid">
-      <%= f.submit (session[:order_now] ? 'Сохранить адрес и оформить заказ' : 'Сохранить адрес'), class: 'btn custom-red-btn w-100 me-5' %>
+      <%= f.submit (session[:order_now] ? t('adress.save_and_order') : t('adress.save')), class: 'btn custom-red-btn w-100 me-5' %>
 
       </div>
     <% end %>

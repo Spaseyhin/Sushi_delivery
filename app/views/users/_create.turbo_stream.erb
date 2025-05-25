@@ -8,13 +8,13 @@
         </div>
       <% end %>
 
-      <p class="alert alert-info"><strong>Ваш проверочный код: <%= user&.confirmation_code || "N/A" %></strong></p>
+      <p class="alert alert-info"><strong><%= t('registration.your_code')%>: <%= user&.confirmation_code || "N/A" %></strong></p>
 
       <%= form_with url: verify_user_path, local: false, class: "needs-validation", data: { controller: "form-validation" } do |form| %>
         <%= form.hidden_field :phone_number, value: user.phone_number %>
 
         <div class="mb-3 text-start">
-          <%= form.label :confirmation_code, "Введите проверочный код: ", class: "form-label" %>
+          <%= form.label :confirmation_code, t('registration.enter_code'), class: "form-label" %>
           <%= form.text_field :confirmation_code,
                               required: true,
                               class: "form-control text-center",
@@ -24,7 +24,7 @@
         </div>
 
         <div class="d-grid">
-          <%= form.submit "Ввести", class: "btn custom-red-btn w-100 me-5" %>
+          <%= form.submit t('registration.enter'), class: "btn custom-red-btn w-100 me-5" %>
         </div>
       <% end %>
     </div>
