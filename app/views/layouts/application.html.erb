@@ -10,33 +10,33 @@
   <%= javascript_importmap_tags %>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
-  <% if flash[:notice] %>
-  <div class="alert alert-success text-center mb-4" role="alert">
-    <strong><%= flash[:notice] %></strong>
-  </div>
-<% end %>
+  <%= render 'shared/flash' %>  
   <!-- Главный контейнер -->
   <div class="main-wrapper py-3">
 
     <!-- Header -->
+    
     <header class="d-flex align-items-center justify-content-between py-3 mb-4">
+
       <!-- Лого + Адрес -->
       <div class="d-flex align-items-center gap-3">
         <a href="<%= root_path %>" class="d-inline-flex link-body-emphasis text-decoration-none">
           <span class="logo-title">SUSHIIII</span>
         </a>
+        
 
         <% if logged_in? %>
           <!-- Адрес -->
           <div class="address-box" id="edit-address-btn" data-bs-toggle="modal" data-bs-target="#addressModal" role="button">
             <% if current_user.address.present? %>
-              <small class="text-muted">Доставим заказ на:</small>
+              <small class="text-muted"><%= t('buttons.delivery_address')%>:</small>
               <strong><%= current_user.address %></strong>
             <% else %>
-              <strong>Указать адрес доставки</strong>
+              <strong></strong>
             <% end %>
           </div>
         <% end %>
@@ -54,15 +54,21 @@
             <%= @cart_items_count || 0 %>
           </span>
         </a>
+        
+
 
         <!-- Вход / Выход -->
         <% if logged_in? %>
-        <%= button_to 'Мои заказы', orders_path,method: :get, class: 'btn custom-red-btn w-100 me-5' %>
+        <%= button_to t('buttons.order_link'), orders_path,method: :get, class: 'btn custom-red-btn w-100 me-5' %>
         
-          <%= button_to "Выйти", logout_path, method: :delete, class: "btn custom-red-btn w-100 me-5", form_class: "d-inline" %>
+          <%= button_to t('buttons.log_out'), logout_path, method: :delete, class: "btn custom-red-btn w-100 me-5", form_class: "d-inline" %>
         <% else %>
-          <%= button_to "Войти", new_user_path, method: :get, class: "btn custom-red-btn w-100 me-5", form_class: "d-inline" %>
+          <%= button_to t('buttons.log_in'), new_user_path, method: :get, class: "btn custom-red-btn w-100 me-5", form_class: "d-inline" %>
         <% end %>
+        <%= link_to (I18n.locale == :en ? "RU" : "EN"),
+            url_for(locale: I18n.locale == :en ? :ru : :en),
+            class: "btn custom-red-btn text-center px-4", style: "min-width: 80px;" %>
+
       </div>
     </header>
 
@@ -80,17 +86,18 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="addressModalLabel">Введите адрес доставки</h5>
+            <h5 class="modal-title" id="addressModalLabel"><%= t('adress.title')%></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
           </div>
           <div class="modal-body">
             <%= form_with model: current_user, url: update_address_users_path, method: :patch, local: true do |f| %>
               <div class="mb-3">
-                <%= f.label :address, 'Адрес', class: 'form-label' %>
+                <%= f.label :address, t('adress.address'), class: 'form-label' %>
                 <%= f.text_field :address, class: 'form-control', value: current_user.address %>
               </div>
               <div class="text-end">
-                <%= f.submit 'Сохранить', class: 'btn custom-red-btn w-100 me-5' %>
+                <%= f.submit t('adress.save'), class: 'btn custom-red-btn w-100 me-5' %>
+                
               </div>
             <% end %>
           </div>

@@ -24,20 +24,26 @@
               </a>
             
             <li>
-              <%= link_to 'Добавить товар', new_admin_product_path, class: 'btn custom-red-btn w-100 me-5' %>
+              <%= link_to t('buttons.add_products'), new_admin_product_path, class: 'btn custom-red-btn w-100 me-5' %>
             </li>
            <li>
-            <%= link_to "Заказы", admin_orders_path, class: "btn custom-red-btn w-100 me-5" %>
+            <%= link_to t('buttons.orders'), admin_orders_path, class: "btn custom-red-btn w-100 me-5" %>
 
             </li>
 
             <li class="nav-item">
               <!-- Блок пользователя -->
-              <div class="d-flex justify-content-end mb-3">
+
+                <div class="d-flex justify-content-end gap-3 mb-3">
                 <% if admin_user_signed_in? %>
-                <%= button_to 'Выйти', destroy_admin_user_session_path, method: :delete, class: 'btn custom-red-btn w-100 me-5' %>
+                  <%= button_to t('buttons.log_out'), destroy_admin_user_session_path, method: :delete, class: 'btn custom-red-btn w-100 me-5' %>
                 <% end %>
-                
+
+                <%= link_to (I18n.locale == :en ? "RU" : "EN"),
+                            url_for(locale: I18n.locale == :en ? :ru : :en),
+                            class: "btn custom-red-btn text-center px-4",
+                            style: "min-width: 80px;" %>
+              </div>  
               </div>
             </li>
           </ul>

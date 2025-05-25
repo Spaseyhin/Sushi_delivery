@@ -1,4 +1,4 @@
 <%= form_with url: cart_items_path, method: :post, remote: true do %>
   <%= hidden_field_tag :product_id, product.id %>
-  <%= submit_tag 'Добавить в корзину', class: "btn btn-success" %>
+  <%= submit_tag t('buttons.add_to_cart'), class: "btn btn-success" %>
 <% end %>
