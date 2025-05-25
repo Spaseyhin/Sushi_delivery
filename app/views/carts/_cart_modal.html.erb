@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="cartModalLabel">Ваша корзина</h5>
+        <h5 class="modal-title" id="cartModalLabel"><%= t('cart.title')%></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
@@ -10,9 +10,9 @@
           <%= render 'carts/cart_items', cart_items: @cart_items %>
         </div>
         <% if current_user %>
-          <%= button_to 'Оформить заказ', orders_path, method: :post, class: 'btn custom-red-btn w-100 me-5' %>
+          <%= button_to t('buttons.place_order'), orders_path, method: :post, class: 'btn custom-red-btn w-100 me-5' %>
         <% else %>
-          <%= link_to 'Оформить заказ', new_user_path(order_now: true), class: 'btn custom-red-btn w-100 me-5' %>
+          <%= link_to t('buttons.place_order'), new_user_path(order_now: true), class: 'btn custom-red-btn w-100 me-5' %>
         <% end %>
 
       </div>
