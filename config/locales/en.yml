@@ -28,11 +28,80 @@
 #
 # To learn more, please read the Rails Internationalization guide
 # available at https://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
   users:
     logout_success: "Logged out successfully."
     otp_expired: "OTP code has expired!"
     otp_verified: "Successfully verified!"
     otp_invalid: "Invalid code! Try again."
+    address_save_error: "Error while saving the address."
+  buttons:
+    about: "About Us"
+    add_to_cart: "Add to Cart"
+    order_link: "Orders"
+    log_in: "Log in"
+    log_out: "Log out"
+    send_code: "Send Code"
+    place_order: "Place Order"
+    add_products: "Add Products"
+    orders: "Orders"
+    delivery_address: "We’ll deliver to:"
+    save: "Save Address"
+  order:
+    cart_empty: "Your cart is empty. Please add items before placing an order."
+    error: "An error occurred while placing your order. Please try again."
+    successfully_order: "Thank you for your order! An operator will contact you soon to confirm your order."
+  orders:
+    success_message: "Thank you for your order! An operator will contact you shortly to confirm the details."
+  time:
+    formats:
+      short: "%d.%m.%Y %H:%M"
+  registration:
+    title: "Registration"
+    phone_number: "Phone Number"
+    enter_code: 'Enter the code sent to your phone'
+    your_code: 'Your code'
+    enter: 'Enter'
+  cart:
+    title: "Your cart"
+    total: "Total"
+    price: "Price"
+  receipt: 
+    phone: "Phone Number"
+    title: "Receipt"
+    order_number: "Order Number"
+    order_date: "Order Date"
+    address: "Delivery Address"
+    total_amount: "Total Amount"
+    items:
+      name: "Item Name"
+      quantity: "Quantity"
+      price: "Unit Price"
+      total_price: "Total Price"
+    thank_you: "Thank you for your purchase!"
+  adress:
+    title: "Enter your address"
+    address: "Address"
+    save: "Save Address"
+    error: "Error saving address"
+    save_and_order: "Save Address and Place Order"
+  create_product:
+    title: "Create Product"
+    name: "Product Name"
+    description: "Description"
+    price: "Price"
+    image: "Image"
+    create: "Create Product"
+    error: "Error creating product"
+    photo: "Photo"
+    button_create: "Create Product"
+  about_us:
+    title: "About Us"
+    adress: "Address"
+    phone: "Phone"
+    time: "Opening hours: с 10:00 - 23:00, daily"
+  devise:
+    sessions:
+      admin_user:
+        signed_in: "You are logged in as an administrator."
+        signed_out: "You have successfully logged out."

@@ -7,3 +7,11 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+# Удаление дублирующихся значений в поле order_number
+Order.group(:order_number).having('COUNT(*) > 1').pluck(:order_number).each do |duplicate_order_number|
+  orders = Order.where(order_number: duplicate_order_number).order(:id)
+  orders.offset(1).each_with_index do |order, index|
+    order.update!(order_number: duplicate_order_number.to_i + index + 1)
+  end
+end

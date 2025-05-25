@@ -1,0 +1,77 @@
+ru:
+  users:
+    logout_success: "Вы успешно вышли из аккаунта."
+    otp_expired: "Срок действия кода истёк!"
+    otp_verified: "Код успешно подтверждён!"
+    otp_invalid: "Неверный код! Попробуйте снова."
+    address_save_error: "Ошибка при сохранении адреса."
+  buttons:
+    about: "О нас"
+    add_to_cart: "Добавить в корзину"
+    order_link: "Мои заказы"
+    log_in: "Войти"
+    log_out: "Выйти"
+    send_code: "Отправить код"
+    place_order: "Оформить заказ"
+    add_products: "Добавить товар"
+    orders: "Заказы"
+    delivery_address: "Мы доставим по адресу:"
+    save: "Сохранить адрес"
+  order:
+    cart_empty: "Ваша корзина пуста. Пожалуйста, добавьте товары перед оформлением заказа."
+    error: "Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте ещё раз."
+    successfully_order: "Спасибо за заказ! Оператор свяжется с вами в ближайшее время для подтверждения."
+  orders:
+    success_message: "Спасибо за заказ! Оператор вскоре свяжется с вами для подтверждения деталей."
+  time:
+    formats:
+      short: "%d.%m.%Y %H:%M"
+  registration:
+    title: "Регистрация"
+    phone_number: "Номер телефона"
+    enter_code: "Введите код, отправленный на ваш телефон"
+    your_code: "Ваш код"
+    enter: "Войти"
+  cart:
+    title: "Ваша корзина"
+    total: "Итого"
+    price: "Цена"
+  receipt: 
+    phone: "Номер телефона"
+    title: "Чек"
+    order_number: "Номер заказа"
+    order_date: "Дата заказа"
+    address: "Адрес доставки"
+    total_amount: "Общая сумма"
+    items:
+      name: "Название"
+      quantity: "Количество"
+      price: "Цена за единицу"
+      total_price: "Итоговая цена"
+    thank_you: "Спасибо за покупку!"
+  adress:
+    title: "Введите адрес доставки"
+    address: "Адрес"
+    save: "Сохранить адрес"
+    error: "Ошибка при сохранении адреса"
+    save_and_order: "Сохранить адрес и оформить заказ"
+  create_product:
+    title: "Создать товар"
+    name: "Название товара"
+    description: "Описание"
+    price: "Цена"
+    image: "Изображение"
+    create: "Создать товар"
+    error: "Ошибка при создании товара"
+    photo: "Фото"
+    button_create: "Создать товар"
+  about_us:
+    title: "О нас"
+    adress: "Адрес"
+    phone: "Телефон"
+    time: "Время работы: с 10:00 до 23:00, ежедневно"
+  devise:
+    sessions:
+      admin_user:
+        signed_in: "Вы вошли как администратор."
+        signed_out: "Вы вышли из учётной записи администратора."
