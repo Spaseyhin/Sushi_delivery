@@ -6,12 +6,12 @@
         <div class="card h-100 border-0 shadow-sm d-flex flex-column justify-content-between card-hover" style="transition: transform 0.3s ease;">
 
           <!-- Фото без отступов -->
-          <% if product.image.attached? %>
-            <%= image_tag product.image.variant(resize_to_limit: [300, 300]), class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
-          <% else %>
-            <%= image_tag "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%' height='100%' fill='%23f8f9fa'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-size='20'>No Image</text></svg>", width: 300, height: 300, class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
+              <% if product.image.attached? %>
+                <%= image_tag url_for(product.image), width: 300, height: 300, class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
+              <% else %>
+                <%= image_tag "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%' height='100%' fill='%23f8f9fa'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-size='20'>No Image</text></svg>", width: 300, height: 300, class: "card-img-top", style: "object-fit: contain; padding: 10px;" %>
+              <% end %>
 
-          <% end %>
 
           <!-- Описание -->
           <div class="card-body text-center p-2">

@@ -15,3 +15,8 @@ Order.group(:order_number).having('COUNT(*) > 1').pluck(:order_number).each do |
     order.update!(order_number: duplicate_order_number.to_i + index + 1)
   end
 end
+
+AdminUser.find_or_create_by!(email: 'admin@example.com') do |admin|
+  admin.password = 'password'
+  admin.password_confirmation = 'password'
+end
