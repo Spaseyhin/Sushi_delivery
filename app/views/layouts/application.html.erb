@@ -16,14 +16,17 @@
 <body>
   <%= render 'shared/flash' %>  
   <!-- Главный контейнер -->
-  <div class="main-wrapper py-3">
+ <div class="container-fluid px-2 px-md-5 py-3">
+
 
     <!-- Header -->
     
-    <header class="d-flex align-items-center justify-content-between py-3 mb-4">
+    <header class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 py-3 mb-4">
+
 
       <!-- Лого + Адрес -->
-      <div class="d-flex align-items-center gap-3">
+      <div class="d-flex flex-column flex-md-row align-items-center gap-3 text-center text-md-start">
+
         <a href="<%= root_path %>" class="d-inline-flex link-body-emphasis text-decoration-none">
           <span class="logo-title">SUSHIIII</span>
         </a>
@@ -49,7 +52,7 @@
           class="text-decoration-none text-dark d-flex align-items-center position-relative"
           data-bs-toggle="modal"
           data-bs-target="#cartModal">
-          <i class="bi bi-basket" style="font-size: 2.5rem;"></i>
+          <i class="bi bi-basket fs-3 fs-sm-2 fs-md-1"></i>
           <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             <%= @cart_items_count || 0 %>
           </span>
