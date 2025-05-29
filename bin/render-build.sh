@@ -4,4 +4,7 @@ set -o errexit
 bundle install
 bundle exec rake assets:precompile
 bundle exec rake db:migrate
-bundle exec rake db:seed
+# Принудительно прогоняем сиды
+if [ "$RAILS_ENV" = "production" ]; then
+  bundle exec rake db:seed
+fi
