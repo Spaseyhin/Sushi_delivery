@@ -147,9 +147,28 @@
   
   
   .main-wrapper {
-    padding-left: 250px;
-    padding-right: 250px;
+    padding-left: 0;
+    padding-right: 0;
+  
+    // xs: <576px — по умолчанию без отступов
+    // sm: ≥576px
+    @media (min-width: 576px) {
+      padding-left: 5rem;
+      padding-right: 5rem;
+    }
+    @media (min-width: 992px) {
+      padding-left: 5rem;
+      padding-right: 5rem;
+    }
+    @media (min-width: 1200px) {
+      padding-left: 15rem;
+      padding-right: 15rem;
+    }
+  
+
   }
+  
+  
   
   .custom-flash {
     position: fixed;

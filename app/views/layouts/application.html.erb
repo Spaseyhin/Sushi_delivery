@@ -16,34 +16,45 @@
 <body>
   <%= render 'shared/flash' %>  
   <!-- Главный контейнер -->
- <div class="container-fluid px-2 px-md-5 py-3">
+  <div class="main-wrapper">
+
 
 
     <!-- Header -->
     
-    <header class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 py-3 mb-4">
+    <header class="d-flex flex-column gap-2 gap-md-0 flex-md-row align-items-center justify-content-between py-3 mb-4">
+  <!-- Логотип (мобильный) -->
+  <!-- Логотип и адрес для мобильных -->
+<div class="w-100 d-block d-md-none text-center mb-2">
+  <a href="<%= root_path %>" class="d-inline-flex link-body-emphasis text-decoration-none mb-1">
+    <span class="logo-title">SUSHIIII</span>
+  </a>
 
+  <% if logged_in? && current_user.address.present? %>
+    <div class="address-box mx-auto d-inline-block mt-1" id="edit-address-btn" data-bs-toggle="modal" data-bs-target="#addressModal" role="button">
+      <small class="text-muted"><%= t('buttons.delivery_address')%>:</small>
+      <strong><%= current_user.address %></strong>
+    </div>
+  <% end %>
+</div>
 
-      <!-- Лого + Адрес -->
-      <div class="d-flex flex-column flex-md-row align-items-center gap-3 text-center text-md-start">
+  <!-- Логотип + адрес (десктоп) -->
+  <div class="d-none d-md-flex align-items-center gap-3">
+    <a href="<%= root_path %>" class="d-inline-flex link-body-emphasis text-decoration-none">
+      <span class="logo-title">SUSHIIII</span>
+    </a>
 
-        <a href="<%= root_path %>" class="d-inline-flex link-body-emphasis text-decoration-none">
-          <span class="logo-title">SUSHIIII</span>
-        </a>
-        
-
-        <% if logged_in? %>
-          <!-- Адрес -->
-          <div class="address-box" id="edit-address-btn" data-bs-toggle="modal" data-bs-target="#addressModal" role="button">
-            <% if current_user.address.present? %>
-              <small class="text-muted"><%= t('buttons.delivery_address')%>:</small>
-              <strong><%= current_user.address %></strong>
-            <% else %>
-              <strong></strong>
-            <% end %>
-          </div>
+    <% if logged_in? %>
+      <div class="address-box" id="edit-address-btn" data-bs-toggle="modal" data-bs-target="#addressModal" role="button">
+        <% if current_user.address.present? %>
+          <small class="text-muted"><%= t('buttons.delivery_address')%>:</small>
+          <strong><%= current_user.address %></strong>
+        <% else %>
+          <strong></strong>
         <% end %>
       </div>
+    <% end %>
+  </div>
 
       <!-- Корзина и авторизация -->
       <div class="d-flex align-items-center gap-3">
