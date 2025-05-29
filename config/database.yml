@@ -17,8 +17,4 @@ test:
 
 production:
   <<: *default
-  database: sushi_delivery_production
-  username: <%= ENV["SUSHI_DELIVERY_DB_USERNAME"] %>
-  password: <%= ENV["SUSHI_DELIVERY_DATABASE_PASSWORD"] %>
-  host: <%= ENV.fetch("DB_HOST") { "localhost" } %>
-  port: <%= ENV.fetch("DB_PORT") { 5432 } %>
+  url: <%= ENV["DATABASE_URL"] %>
