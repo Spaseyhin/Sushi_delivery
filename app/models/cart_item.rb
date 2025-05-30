@@ -9,6 +9,8 @@ class CartItem < ApplicationRecord
   belongs_to :cart
   belongs_to :product
 
+  validates :quantity, numericality: { greater_than: 0 }
+
   def adjust_quantity!(change)
     new_quantity = quantity + change.to_i
     new_quantity.positive? ? update!(quantity: new_quantity) : destroy!
