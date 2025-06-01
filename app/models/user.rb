@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :orders, dependent: :destroy
   validates :phone_number,
             presence: true,
-            uniqueness: true,
+            uniqueness: { case_sensitive: false },
             format: { with: /\A\+7\d{10}\z/, message: :invalid_format }
   validates :confirmation_code, length: { is: 4 }, allow_nil: true
   validate :phone_number_cannot_be_repeating_digits
@@ -60,8 +60,8 @@ class User < ApplicationRecord
   end
 
   def phone_number_cannot_be_repeating_digits
-    digits = phone_number.to_s.gsub(/\D/, '')
-    return unless digits.match?(/\A(\d)\1*\z/)
+    digits = phone_number.to_s.gsub(/\D/, '')[-10..]
+    return unless digits.present? && digits.match?(/\A(\d)\1{9}\z/)
 
     errors.add(:phone_number, 'не может состоять из одинаковых цифр')
   end

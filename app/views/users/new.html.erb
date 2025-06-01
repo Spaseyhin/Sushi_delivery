@@ -1,6 +1,6 @@
 <div class="container d-flex justify-content-center align-items-center">
   <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
-<h2 class="text-center mb-3"><%= t('registration.title') %></h2>
+    <h2 class="text-center mb-3"><%= t('registration.title') %></h2>
 
     <%= turbo_frame_tag "auth_form" do %>
       <%= form_with url: users_path, local: false, class: "needs-validation", data: { controller: "form-validation" } do |form| %>
@@ -11,6 +11,12 @@
                 class: "form-control", 
                 placeholder: "+7XXXXXXXXXX",
                 data: { form_validation_target: "phone" } %>
+
+          <% if @user&.errors[:phone_number].any? %>
+            <div class="text-danger small mt-1">
+              <%= @user.errors[:phone_number].join(', ') %>
+            </div>
+          <% end %>
         </div>
 
         <div class="d-grid">

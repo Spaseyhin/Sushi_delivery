@@ -17,9 +17,13 @@ class UsersController < ApplicationController
 
   # Создаёт и отправляет OTP пользователю
   def create
-    @user.generate_confirmation_code!
-    respond_to do |format|
-      format.turbo_stream { render partial: 'users/create', locals: { user: @user } }
+    @user = User.find_or_initialize_by_phone(params[:phone_number])
+
+    if @user.valid?
+      @user.generate_confirmation_code!
+      render partial: 'users/create', locals: { user: @user }, formats: :turbo_stream
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
